@@ -1,95 +1,77 @@
-#include <iostream>
- 
+#include<iostream>
+#define MAX 30
+#include<time.h>
+
 using namespace std;
- 
-// A function to merge the two half into a sorted data.
-void Merge(int *a, int low, int high, int mid)
+
+void merge(int arr[], int low, int mid, int high)
 {
-	// We have low to mid and mid+1 to high already sorted.
-	int i, j, k, temp[high-low+1];
-	i = low;
-	k = 0;
-	j = mid + 1;
- 
-	// Merge the two parts into temp[].
-	while (i <= mid && j <= high)
-	{
-		if (a[i] < a[j])
-		{
-			temp[k] = a[i];
-			k++;
-			i++;
-		}
-		else
-		{
-			temp[k] = a[j];
-			k++;
-			j++;
-		}
-	}
- 
-	// Insert all the remaining values from i to mid into temp[].
-	while (i <= mid)
-	{
-		temp[k] = a[i];
-		k++;
-		i++;
-	}
- 
-	// Insert all the remaining values from j to high into temp[].
-	while (j <= high)
-	{
-		temp[k] = a[j];
-		k++;
-		j++;
-	}
- 
- 
-	// Assign sorted data stored in temp[] to a[].
-	for (i = low; i <= high; i++)
-	{
-		a[i] = temp[i-low];
-	}
+    int i = low;
+    int j = mid + 1;
+    int k = 0;
+    int temp[high-low+1];
+    while(i<=mid && j<=high)
+    {
+        if(arr[i]<=arr[j])
+        {
+            temp[k] = arr[i];
+            i++;
+        }
+        else
+        {
+            temp[k] = arr[j];
+            j++;
+        }
+        k++;
+    }
+    while(i<=mid)
+    {
+        temp[k] = arr[i];
+        i++;
+        k++;
+    }
+    while(j<=high)
+    {
+        temp[k] = arr[j];
+        j++;
+        k++;
+    }
+    for(i=low;i<=high;i++)
+    {
+        arr[i] = temp[i-low];
+    }
 }
- 
-// A function to split array into two parts.
-void MergeSort(int *a, int low, int high)
+
+
+void mergeSort(int arr[], int low, int high)
 {
-	int mid;
-	if (low < high)
-	{
-		mid=(low+high)/2;
-		// Split the data into two half.
-		MergeSort(a, low, mid);
-		MergeSort(a, mid+1, high);
- 
-		// Merge them to get sorted output.
-		Merge(a, low, high, mid);
-	}
+    int mid;
+    if(low<high)
+    {
+        mid = (low+high)/2;
+        mergeSort(arr, low, mid);
+        mergeSort(arr, mid+1, high);
+        merge(arr, low, mid, high);
+    }
 }
- 
+
 int main()
 {
-    clock_t start,end;
-	int n, i;
-	cout<<"\nEnter the number of data element to be sorted: ";
-	cin>>n;
- 
-	int arr[n];
-	for(i = 0; i < n; i++)
-	{
-		cout<<"Enter element "<<i+1<<": ";
-		cin>>arr[i];
-	}
- 
-	MergeSort(arr, 0, n-1);
- 
-	// Printing the sorted data.
-	start=clock();
-	cout<<"\nSorted Data:\n ";
-	for (i = 0; i < n; i++)
-        cout<<"\t"<<arr[i];
-    end=clock();
-    cout<<"\ntime taken for merge sort is\n"<<(double)(end-start)/CLOCKS_PER_SEC<<endl;
-	return 0;
+    int arr[MAX], size;
+    cout<<"Enter size of array: ";
+    cin>>size;
+    cout<<"Enter elements: "<<endl;
+    for (int i=0;i<size;i++)
+        cin>>arr[i];
+    clock_t start = clock();
+    mergeSort(arr, 0, size-1);
+    clock_t end = clock();
+    cout<<"printing array: "<<endl;
+    for(int i=0;i<size;i++)
+        cout<<arr[i]<<endl;
+    double time = double(end-start)/CLOCKS_PER_SEC;
+    cout<<"time taken: "<<time*1000000<<" Microsseconds\n";
+    return 0;
 }
+
+
